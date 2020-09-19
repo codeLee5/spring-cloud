@@ -1,0 +1,20 @@
+server:
+  port: 9001
+eureka:
+  client:
+    service-url:
+      defaultZone: http://qianfeng:java@eureka-7001:7001/eureka/
+spring:
+  application:
+    name: cloud-zuul-service  #配置自身微服务的名称：这个名称就非常关键了。是eureka做负载均衡的依据
+zuul:
+  routes:  #配置路由
+    #   的范围反对: #唯一标识
+    #  path: /user/**
+    #  service-id: user-rest-service  格式： 微服务名称：ANT风格路径
+    cloud-user-service-hystrix: /userHystrix/** # 当从网关访问/user/**路径时候，就会映射到 user-rest-service微服务上去/ 根路径
+    cloud-user-service-lee: /user/** # 当从网关访问/user/**路径时候，就会映射到  cloud-user-service-lee微服务上去/,请求路径前需要添加user
+
+    #good-rest-service: /goods/**
+  sensitive-headers: "*" # 忽略掉所有的敏感头信息。因为网关需要拿到所有头信息，它自动会把一些自以为不安全的头信息给你忽略掉，所以配置不需要忽略
+  ignored-services: "*"  # 忽略微服务本身的名字，这样做到隐藏微服务本身的名字。。。我们给前端的时候，就只需要给代理路径即可（/user/**）

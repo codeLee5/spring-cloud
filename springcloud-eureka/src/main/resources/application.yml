@@ -1,0 +1,48 @@
+eureka:
+  client:  # 不向eureka注册中心注册自己，因为自己就是注册中心
+    fetch-registry: false        # 不向注册中心获取 微服务的 注册信息，因为自己就是注册中心
+    register-with-eureka: false
+  server:
+    eviction-interval-timer-in-ms: 4000 # 设置eureka清除死亡服务时间间隔 4秒，设置为4秒开发的时候会快一点,正式环境默认就是30秒，不用修改
+#spring:
+#  security:
+#    user:
+#      name: qianfeng  #配置安全模块的账户名称,最后它的安全模块会加密
+#      password: java  #配置安全模块的密码，最后它的安全模块会加密
+#      roles: ADMIN    #当前用户是超级管理员
+eurekapasswd: 'qianfeng:java@'  #eureka的账户名和密码
+
+---
+server:
+  port: 7001  #这个是eureka启动端口号
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${eurekapasswd}eureka-7001:7001/eureka
+  instance:
+    hostname: eureka-7001      # 指的是eureka的主机名称
+spring:
+  profiles: eureka-7001
+
+---
+server:
+  port: 7002 #这个是eureka启动端口号
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${eurekapasswd}eureka-7001:7001/eureka,http://${eurekapasswd}eureka-7003:7003/eureka #注册中心的地址，注意最后有一个/eureka
+  instance:
+    hostname: eureka-7002      # 指的是eureka的主机名称
+spring:
+  profiles: eureka-7002
+---
+server:
+  port: 7003  #这个是eureka启动端口号
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${eurekapasswd}eureka-7002:7002/eureka,http://${eurekapasswd}eureka-7001:7001/eureka #注册中心的地址，注意最后有一个/eureka
+  instance:
+    hostname: eureka-7003      # 指的是eureka的主机名称
+spring:
+  profiles: eureka-7003

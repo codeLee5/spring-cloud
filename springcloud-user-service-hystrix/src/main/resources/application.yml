@@ -1,0 +1,72 @@
+server:
+  port: 8002
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-7001:7001/eureka #启动的时候向注册中心注册user服务
+
+spring:
+  profiles:
+    active: dev  #默认 以dev环境启动
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource  #阿里巴巴的druid数据库连接池 配置三个东西
+    url: jdbc:mysql://120.25.223.121/tcmm_db_test?serverTimezone=Asia/Shanghai
+    password: root
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  messages:
+    basename: i18n.msg,i18n.validate  #国际化的配置文件配置到项目中
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss  #统一返回日志格式（实际工作用这种方式，统一配置）
+    time-zone: Asia/Shanghai  #统一配置json返回日期的时区是当前数据库，当前程序所运行的时区，上海
+  application:
+    name: cloud-user-service-hystrix #注册服务的名称
+
+  zipkin:
+    base-url: http://localhost:9411/  # 链路追踪的服务器地址
+  sleuth:
+    sampler:
+      probability: 1  #(范围是0-1) 指的是收集数据的比例  采集数据的比例（0-1）
+
+
+mybatis:
+    mapper-locations: classpath*:mybatis/mapper/**/*.xml     # 配置两个mapper的映射文件路径，注意单词不要写错了，还有个classpath*不要少些
+    configuration:
+      map-underscore-to-camel-case: true  # 数据库下划线转小驼峰，必须要配置
+      # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # sql语句标准输出，这是一种配置sql语句输出的方式
+
+logging: #设置日志
+  level:
+    com.qf.springcloud.dao: debug  #我这里设置的debug级别
+
+---
+spring:
+    profiles: pro
+    datasource:
+      url: jdbc:mysql://120.25.223.121/tcmm_db_test?serverTimezone=Asia/Shanghai
+
+logging: #设置日志
+      level:
+        com.qf.springcloud.dao: debug  #我这里设置的debug级别
+---
+server:
+  port: 8001
+
+spring:
+  profiles: dev1  #开发环境的下的配置文件
+  datasource:
+    url: jdbc:mysql://120.25.223.121/tcmm_db_test?serverTimezone=Asia/Shanghai
+logging: #设置日志
+  level:
+    com.qf.springcloud.dao: debug  #我这里设置的debug级别
+---
+server:
+  port: 8002
+
+spring:
+  profiles: dev2  #开发环境的下的配置文件
+  datasource:
+    url: jdbc:mysql://120.25.223.121/tcmm_db_test?serverTimezone=Asia/Shanghai
+logging: #设置日志
+  level:
+    com.qf.springcloud.dao: debug  #我这里设置的debug级别

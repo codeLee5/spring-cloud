@@ -1,0 +1,15 @@
+server:
+  servlet:
+    context-path: /ribbon
+
+eureka:
+  client:
+    register-with-eureka: false #不向eureka注册自己，因为 自己是个消费者，不对外提供服务
+    service-url:
+      defaultZone: http://eureka-7001:7001/eureka,http://eureka-7002:7002/eureka,http://eureka-7003:7003/eureka #注册中心的地址，注意最后有一个/eureka
+    registry-fetch-interval-seconds: 3 #开发环境 我三秒钟就去获取eureka中最新的微服务注册信息
+
+
+
+
+
